@@ -1,0 +1,23 @@
+[
+  {
+    "college": "ut-austin",
+    "term": "Fall 2026",
+    "type": "Priority Deadline",
+    "date": "2026-01-13",
+    "notes": "CAP internal transfer priority deadline"
+  },
+  {
+    "college": "columbia-university",
+    "term": "Fall 2026",
+    "type": "Transfer Application Deadline",
+    "date": "2026-03-01",
+    "notes": "Recommended to submit earlier for best consideration"
+  },
+  {
+    "college": "vanderbilt-university",
+    "term": "Fall 2026",
+    "type": "Transfer Application Deadline",
+    "date": "2026-03-15",
+    "notes": "Check if College of Arts & Science has different date"
+  }
+]

@@ -1,5 +1,7 @@
+// app/colleges/page.tsx
+
 import Link from "next/link";
-import collegesData from "../data/colleges.json";
+import collegesData from "@/app/data/colleges.json";
 
 type College = {
   name: string;
@@ -26,7 +28,7 @@ export default function Page() {
         {colleges.map((college) => (
           <Link
             key={college.slug ?? college.name}
-            href={college.slug ? `/colleges/${college.slug}` : "#"}
+            href={`/colleges/${college.slug}`}
             className="block rounded-2xl border border-zinc-800 bg-zinc-900/60 p-4 hover:border-zinc-500 transition"
           >
             <h2 className="text-lg font-semibold">{college.name}</h2>

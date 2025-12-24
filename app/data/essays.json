@@ -1,0 +1,23 @@
+[
+  {
+    "college": "ut-austin",
+    "prompt": "Describe why UT Austin is the right next step for you...",
+    "status": "Draft",
+    "wordLimit": 500,
+    "notes": "Reuse parts of Columbia essay"
+  },
+  {
+    "college": "columbia-university",
+    "prompt": "Why are you interested in transferring to Columbia University, and how do you hope to contribute to the Columbia community?",
+    "status": "Not started",
+    "wordLimit": 600,
+    "notes": "Focus on NYC, core curriculum, research, and fit with transfer story."
+  },
+  {
+    "college": "vanderbilt-university",
+    "prompt": "Describe how Vanderbilt’s academic and community environment will help you achieve your goals as a transfer student.",
+    "status": "Not started",
+    "wordLimit": 500,
+    "notes": "Tie in neuroscience, research, and campus culture; mention Nashville opportunities."
+  }
+]

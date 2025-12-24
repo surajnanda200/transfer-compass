@@ -1,0 +1,26 @@
+[
+  {
+    "name": "UT Austin",
+    "category": "Public",
+    "location": "Austin, TX",
+    "slug": "ut-austin",
+    "website": "https://www.utexas.edu",
+    "notes": "CAP, internal transfer target"
+  },
+  {
+    "name": "Columbia University",
+    "category": "Private",
+    "location": "New York, NY",
+    "slug": "columbia-university",
+    "website": "https://www.columbia.edu",
+    "notes": "Dream reach"
+  },
+  {
+    "name": "Vanderbilt University",
+    "category": "Private",
+    "location": "Nashville, TN",
+    "slug": "vanderbilt-university",
+    "website": "https://www.vanderbilt.edu",
+    "notes": "Top realistic target"
+  }
+]
