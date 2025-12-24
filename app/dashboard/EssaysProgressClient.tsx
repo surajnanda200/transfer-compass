@@ -14,9 +14,9 @@ type College = {
 };
 
 type Essay = {
-  college: string;
+  college: string; // slug OR college name (your data supports both)
   prompt: string;
-  status: string;
+  status: string; // "Not Started" | "Draft" | "Final" | "Submitted" (string for flexibility)
   wordLimit?: number | string;
   notes?: string;
 };
@@ -24,47 +24,46 @@ type Essay = {
 type EssayEntry = {
   collegeId: string;
   defaultStatus: string;
-  idx: number; // index within this college's essays
+  idx: number; // index within that college's essays list
 };
 
 function normalizeSlug(name: string) {
   return name.toLowerCase().replace(/\s+/g, "-");
 }
 
-// OLD storage key (for backward compatibility / migration)
 function legacyStatusKey(collegeId: string, idx: number) {
   return `essayStatus:${collegeId}:${idx}`;
 }
 
 export default function EssaysProgressClient() {
   const colleges = collegesData as College[];
-  const essays = essaysData as Essay[];
+  const allEssays = essaysData as Essay[];
 
-  // Build entries once (stable)
+  // Build a stable list of essay "slots" across all colleges
   const entries: EssayEntry[] = useMemo(() => {
     const list: EssayEntry[] = [];
 
     colleges.forEach((college) => {
       const collegeId = college.slug ?? normalizeSlug(college.name);
 
-      const collegeEssays = essays.filter(
+      const collegeEssays = allEssays.filter(
         (e) => e.college === collegeId || e.college === college.name
       );
 
       collegeEssays.forEach((essay, idx) => {
         list.push({
           collegeId,
-          defaultStatus: essay.status,
+          defaultStatus: essay.status ?? "Not Started",
           idx,
         });
       });
     });
 
     return list;
-  }, [colleges, essays]);
+  }, [colleges, allEssays]);
 
   const [statuses, setStatuses] = useState<string[]>(() =>
-    entries.map((e) => e.defaultStatus)
+    entries.map((e) => e.defaultStatus ?? "Not Started")
   );
 
   // Load from new shared storage; fallback to legacy keys and migrate
@@ -75,7 +74,7 @@ export default function EssaysProgressClient() {
       const loaded = entries.map((entry) => {
         const saved = getCollegeState(entry.collegeId);
 
-        // ✅ New format: per-college essaysStatus (array of strings)
+        // New format: per-college essaysStatus: string[]
         const fromNew =
           Array.isArray(saved?.essaysStatus) && saved.essaysStatus[entry.idx]
             ? saved.essaysStatus[entry.idx]
@@ -83,10 +82,11 @@ export default function EssaysProgressClient() {
 
         if (fromNew) return fromNew;
 
-        // 🔁 Legacy format fallback (so you don't lose prior progress)
+        // Legacy fallback
         const fromLegacy =
           localStorage.getItem(legacyStatusKey(entry.collegeId, entry.idx)) ??
-          entry.defaultStatus;
+          entry.defaultStatus ??
+          "Not Started";
 
         return fromLegacy;
       });
@@ -126,7 +126,7 @@ export default function EssaysProgressClient() {
     );
   }
 
-  const lower = statuses.map((s) => (s ?? "").toLowerCase());
+  const lower = statuses.map((s) => (s ?? "not started").toLowerCase());
 
   const countNotStarted = lower.filter((s) => s === "not started").length;
   const countDraft = lower.filter((s) => s === "draft").length;
@@ -145,23 +145,18 @@ export default function EssaysProgressClient() {
         <div>
           <h2 className="text-sm font-semibold">Essay progress</h2>
           <p className="mt-1 text-xs text-zinc-400">
-            Tracks status across all schools using your latest changes.
+            Tracks status across all schools (saved locally in your browser).
           </p>
         </div>
         <div className="text-right">
           <p className="text-xl font-semibold">{percentComplete}%</p>
-          <p className="text-[11px] text-zinc-500">
-            completed (Final/Submitted)
-          </p>
+          <p className="text-[11px] text-zinc-500">completed (Final/Submitted)</p>
         </div>
       </div>
 
       {/* Progress bar */}
       <div className="mt-1 h-2 w-full rounded-full bg-zinc-800 overflow-hidden">
-        <div
-          className="h-full bg-sky-500 transition-all"
-          style={{ width: `${percentComplete}%` }}
-        />
+        <div className="h-full bg-sky-500 transition-all" style={{ width: `${percentComplete}%` }} />
       </div>
 
       {/* Breakdown */}
@@ -182,11 +177,9 @@ export default function EssaysProgressClient() {
           Final: <span className="text-zinc-100">{countFinal}</span>
         </span>
         <span>
-          Submitted:{" "}
-          <span className="text-zinc-100">{countSubmitted}</span>
+          Submitted: <span className="text-zinc-100">{countSubmitted}</span>
         </span>
       </div>
     </section>
   );
 }
-

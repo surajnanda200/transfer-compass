@@ -126,11 +126,13 @@ export default async function CollegePage({ params }: CollegePageProps) {
           <h2 className="text-lg font-semibold">
             Application materials checklist
           </h2>
-          <MaterialsChecklistClient collegeSlug={slug} />
+        <MaterialsChecklistClient collegeSlug={slug} />
+
         </div>
 
         <div className="rounded-xl border border-zinc-800 bg-zinc-950/40">
-          <MaterialsChecklistClient collegeSlug={slug} showItems />
+<MaterialsChecklistClient collegeSlug={slug} />
+
         </div>
       </section>
 
@@ -185,7 +187,7 @@ export default async function CollegePage({ params }: CollegePageProps) {
       <section className="mt-10 mb-16">
         <div className="flex items-center justify-between mb-3 gap-4">
           <h2 className="text-lg font-semibold">Essays</h2>
-          <EssaysProgressClient essays={collegeEssays} />
+          <EssaysProgressClient  />
         </div>
 
         {collegeEssays.length === 0 ? (
