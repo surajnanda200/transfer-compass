@@ -21,19 +21,19 @@ const DEFAULT_ITEMS: ChecklistItem[] = [
 ];
 
 type Props = {
-  collegeId: string; // slug from the URL, e.g. "ut-austin"
+  collegeSlug: string; // slug from the URL, e.g. "ut-austin"
 };
 
-export default function MaterialsChecklist({ collegeId }: Props) {
+export default function MaterialsChecklistClient({ collegeSlug }: Props) {
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
 
   // Load saved checklist from localStorage (via helper)
   useEffect(() => {
-    const saved = getCollegeState(collegeId);
+    const saved = getCollegeState(collegeSlug);
     if (saved?.materials) {
       setCheckedItems(saved.materials);
     }
-  }, [collegeId]);
+  }, [collegeSlug]);
 
   // Toggle + persist
   const toggleItem = (id: string) => {
@@ -44,8 +44,8 @@ export default function MaterialsChecklist({ collegeId }: Props) {
 
     setCheckedItems(updated);
 
-    const existing = getCollegeState(collegeId) || {};
-    saveCollegeState(collegeId, {
+    const existing = getCollegeState(collegeSlug) || {};
+    saveCollegeState(collegeSlug, {
       ...existing,
       materials: updated,
     });
@@ -58,9 +58,7 @@ export default function MaterialsChecklist({ collegeId }: Props) {
   return (
     <section className="mt-8 space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-base font-semibold">
-          Application materials checklist
-        </h2>
+        <h2 className="text-base font-semibold">Application materials checklist</h2>
         <span className="text-xs text-zinc-400">
           {completed}/{total} done • {percent}%
         </span>
@@ -70,23 +68,14 @@ export default function MaterialsChecklist({ collegeId }: Props) {
         {DEFAULT_ITEMS.map((item) => {
           const isDone = !!checkedItems[item.id];
           return (
-            <label
-              key={item.id}
-              className="flex items-center gap-3 text-sm cursor-pointer"
-            >
+            <label key={item.id} className="flex items-center gap-3 text-sm cursor-pointer">
               <input
                 type="checkbox"
                 checked={isDone}
                 onChange={() => toggleItem(item.id)}
                 className="h-4 w-4 rounded border-zinc-600 bg-zinc-900 text-emerald-500 focus:ring-emerald-400"
               />
-              <span
-                className={
-                  isDone
-                    ? "text-zinc-400 line-through"
-                    : "text-zinc-200"
-                }
-              >
+              <span className={isDone ? "text-zinc-400 line-through" : "text-zinc-200"}>
                 {item.label}
               </span>
             </label>
